@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Environments
+venv/
+.env
+
+# Data (too large for GitHub)
+data/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Models (we'll use Git LFS or HuggingFace for these later)
+models/*.pkl
+models/*.joblib
+
+# OS
+.DS_Store
+Thumbs.db
