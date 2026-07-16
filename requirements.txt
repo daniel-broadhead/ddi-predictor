@@ -31,5 +31,8 @@ pydantic
 # --- Model persistence ---
 joblib
 
+# --- Setup Tools (current version noncompatible with the older PyTDC) ---
+setuptools<81
+
 # --- Plotting (used for confusion matrix, SHAP summary plots) ---
 matplotlib
