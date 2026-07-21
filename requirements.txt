@@ -10,7 +10,9 @@
 
 # --- Data & core ML ---
 pandas
-numpy
+# Pinned: RDKit (installed via conda) was compiled against NumPy 1.x.
+# NumPy 2.x breaks RDKit's C-extension imports with "AttributeError: _ARRAY_API not found".
+numpy<2
 scikit-learn
 xgboost
 shap
@@ -30,9 +32,6 @@ pydantic
 
 # --- Model persistence ---
 joblib
-
-# --- Setup Tools (current version noncompatible with the older PyTDC) ---
-setuptools<81
 
 # --- Plotting (used for confusion matrix, SHAP summary plots) ---
 matplotlib
