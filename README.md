@@ -15,4 +15,4 @@ It is impossible to train the model to recognize and assign some DDI because of 
 
 ## Features to make sure to implement
 - Dictionary converting the numerical interaaction type into the actual type
-- Dictionary labeling what molecular feature is assigned to each 
+- Dictionary labeling what molecular structure is assigned to each feature. 

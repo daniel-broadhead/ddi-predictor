@@ -1,6 +1,7 @@
 import os
 import json
 import joblib
+import numpy as np
 
 from src.features import smiles_to_fp
 from src.explain import explain_prediction
@@ -30,12 +31,16 @@ def _load_artifacts():
 
 def predict_from_smiles(smiles1, smiles2):
     """Given two SMILES strings, return the predicted interaction
-    label and its top contributing fingerprint features."""
+    label, its confidence, and the top contributing fingerprint features."""
     model, le, _ = _load_artifacts()
     fp1 = smiles_to_fp(smiles1)
     fp2 = smiles_to_fp(smiles2)
     label, top_features = explain_prediction(fp1, fp2, model, le)
-    return label, top_features
+
+    pair = np.concatenate([fp1, fp2]).reshape(1, -1).astype(np.float32)
+    confidence = float(model.predict_proba(pair)[0].max())
+
+    return label, confidence, top_features
 
 
 def predict_from_names(drug1_name, drug2_name):
@@ -53,3 +58,4 @@ def predict_from_names(drug1_name, drug2_name):
         raise ValueError(f"'{drug2_name}' not found in drug lookup")
 
     return predict_from_smiles(smiles1, smiles2)
+

@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
@@ -14,11 +18,12 @@ class DrugPair(BaseModel):
 @app.post('/predict')
 def predict(pair: DrugPair):
     try:
-        label, top_features = predict_from_names(pair.drug1, pair.drug2)
+        label, confidence, top_features = predict_from_names(pair.drug1, pair.drug2)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
     return {
         'interaction_type': label,
+        'confidence': confidence,
         'top_features': top_features
     }
