@@ -11,6 +11,9 @@ It is impossible to train the model to recognize and assign some DDI because of 
 - Confusion matrices and where to see the terrible one
 - Having the per-prediction be limited to the predicted interaction, not all interaction types. (speed and for experiment sake(only consider why the model assigned a specific interaction, not ALL interactions))
 - Model, features, predict, and explain stored within separate .py files.  
+- MIT thing for reproducability/usage
+- headless thing for streamlit
+
 
 
 ## Features to make sure to implement
