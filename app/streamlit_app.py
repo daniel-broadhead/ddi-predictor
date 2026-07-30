@@ -19,7 +19,7 @@ if st.button('Check Interaction') and drug1 and drug2:
         st.error(str(e))
     else:
         st.markdown(f'### Predicted interaction')
-        st.write(label.replace('#Drug1', drug1).replace('#Drug2', drug2))
+        st.write(label)
         st.metric('Model confidence', f'{confidence:.1%}')
 
         with st.expander('Top contributing molecular features'):
