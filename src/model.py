@@ -4,6 +4,24 @@ from sklearn.utils.class_weight import compute_sample_weight
 import xgboost as xgb
 
 
+def group_rare_labels(df, y_col='Y', threshold=100, other_label='Other'):
+    """Merge classes with fewer than `threshold` samples into a
+    single catch-all bucket. Returns a new Series of labels (kept
+    classes retain their original value; merged classes become
+    `other_label`) — does not mutate df in place.
+
+    threshold=100 was the choice made for this project: it keeps
+    53 of the original 86 DrugBank interaction types distinct,
+    sacrificing only ~0.7% of rows to the merged bucket, while
+    ensuring every kept class has enough samples to survive a
+    stratified train/val/test split with a trustworthy test-set
+    score.
+    """
+    class_counts = df[y_col].value_counts()
+    rare_labels = class_counts[class_counts < threshold].index
+    return df[y_col].apply(lambda y: other_label if y in rare_labels else y)
+
+
 def train_random_forest(X_train, y_train, random_state=42):
     """Random Forest baseline with balanced class weighting."""
     rf = RandomForestClassifier(
