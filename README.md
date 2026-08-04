@@ -6,7 +6,7 @@ Predicts the specific type of interaction between two drugs — not just whether
 
 ## What it does
 
-Given two drug names, the model predicts which of 54 clinically distinct interaction types is most likely between them (e.g. *"may increase the anticoagulant activities of"*), along with the specific molecular features that drove that prediction.
+Given two drug names, the model predicts which of 54 clinically distinct interaction types is most likely between them (e.g. *"may increase the anticoagulant activities of"*), along with the underlying fingerprint features driving that prediction, via SHAP-style attribution.
 
 Try it: [live demo link — add once deployed to Hugging Face Spaces]
 
@@ -15,8 +15,6 @@ Try it: [live demo link — add once deployed to Hugging Face Spaces]
 Most DDI classifier projects predict a simple yes/no interaction flag. This one predicts the interaction *mechanism* instead — a more clinically useful signal, and a better showcase of both ML engineering and domain understanding. The dataset (TDC's DrugBank benchmark, 191,808 pairs) is natively labeled with 86 distinct interaction types; after merging classes with fewer than 100 samples into a single `Other` bucket, this became a 54-class problem.
 
 ## Architecture
-Drug names -> SMILES Lookup -> Morgan fingerprints(RDKit) -> XGBoost(54 classes) -> native SHAP-style explanation -> interaction-type translation -> Result
-
 - **Features**: Morgan fingerprints (radius 2, 2048 bits per drug, concatenated to 4096 dimensions)
 - **Model**: XGBoost, `multi:softprob`, `tree_method='hist'`, early stopping, balanced sample weighting
 - **Explainability**: XGBoost's native `pred_contribs` (Tree SHAP under the hood) rather than the `shap` library's `TreeExplainer` — at 54 classes, `TreeExplainer` was too slow for real-time serving; native contributions are mathematically equivalent but fast enough for a live app
@@ -25,13 +23,14 @@ Drug names -> SMILES Lookup -> Morgan fingerprints(RDKit) -> XGBoost(54 classes)
 
 ## Results
 
-
 | Metric | Score |
 |---|---|
-| Macro F1 | 0.8685022100635987 |
-| Micro F1 | 0.8492659848326723 |
+| Macro F1 | 0.869 |
+| Micro F1 | 0.849 |
 
-Macro F1 is the headline metric — it weights every class equally regardless of size, which matters given the dataset's long tail (the three largest classes account for ~62% of all pairs). Full per-class breakdown and confusion matrix in `models/confusion_matrix.png`.
+Macro F1 is the headline metric — it weights every class equally regardless of size, which matters given the dataset's long tail (the three largest classes account for ~62% of all pairs).
+
+Macro F1 slightly *exceeding* Micro F1 here is worth noting, since it's the less common pattern — for an imbalanced problem, rare classes usually perform worse and pull the macro average down below accuracy (Micro F1). The likely explanation is the balanced sample weighting used during training (`class_weight='balanced'`), which explicitly treats every class as equally important regardless of size. That appears to trade some performance on the three dominant classes — which control Micro F1, since it's equivalent to overall accuracy — for stronger performance across the 53-class long tail, which is what Macro F1 rewards. Full per-class precision/recall/F1 breakdown is printed by `evaluate_model()` in `03_model_training.ipynb`; confusion matrix in `models/confusion_matrix.png`.
 
 ## Running locally
 
@@ -52,7 +51,9 @@ uvicorn app.api:app --reload
 streamlit run app/streamlit_app.py
 ```
 
-**Note:** `requirements.txt` pins `numpy<2` (RDKit's conda build predates NumPy 2.x's breaking ABI change) and `PyTDC==0.4.1` (newer releases pull in an unrelated single-cell genomics dependency, `tiledbsoma`, that fails to build on Windows).
+**Notes:**
+- `requirements.txt` pins `numpy<2` (RDKit's conda build predates NumPy 2.x's breaking ABI change) and `PyTDC==0.4.1` (newer releases pull in an unrelated single-cell genomics dependency, `tiledbsoma`, that fails to build on Windows).
+- `.streamlit/config.toml` sets `headless = true` and is committed to the repo — this avoids a Windows-specific issue where Streamlit's automatic browser-launch step can silently kill the server right after startup.
 
 ## Project structure
 
