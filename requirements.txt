@@ -5,8 +5,9 @@
 # Install locally via conda, NOT pip:
 #   conda install -c conda-forge rdkit
 # Only uncomment the line below for pip-only environments (e.g. Hugging Face Spaces),
-# since Spaces builds don't use conda:
-# rdkit-pypi
+# since Spaces builds don't use conda. Note: the pip package is named
+# "rdkit" (not the old, deprecated "rdkit-pypi" name):
+# rdkit
 
 # --- Data & core ML ---
 pandas
@@ -35,3 +36,6 @@ joblib
 
 # --- Plotting (used for confusion matrix, SHAP summary plots) ---
 matplotlib
+
+# --- HTTP requests (used in notebook 05 for the PubChem drug lookup) ---
+requests

@@ -54,6 +54,11 @@ streamlit run app/streamlit_app.py
 **Notes:**
 - `requirements.txt` pins `numpy<2` (RDKit's conda build predates NumPy 2.x's breaking ABI change) and `PyTDC==0.4.1` (newer releases pull in an unrelated single-cell genomics dependency, `tiledbsoma`, that fails to build on Windows).
 - `.streamlit/config.toml` sets `headless = true` and is committed to the repo — this avoids a Windows-specific issue where Streamlit's automatic browser-launch step can silently kill the server right after startup.
+- Trained model artifacts (`models/*.joblib`) aren't committed to this
+repo. To generate them, run notebooks `01` through `03` in order after
+installing dependencies — `03_model_training.ipynb` produces `ddi_xgb.joblib`
+and `label_encoder.joblib`. Expect the XGBoost training cell to take significant
+time on CPU (~80 minutes in development).
 
 ## Project structure
 
