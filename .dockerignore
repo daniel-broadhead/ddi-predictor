@@ -1,0 +1,12 @@
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.git/
+.gitignore
+.ipynb_checkpoints/
+notebooks/
+data/
+app/api.py
+models/*.png
+*.md
