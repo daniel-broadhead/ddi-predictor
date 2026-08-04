@@ -60,6 +60,19 @@ installing dependencies — `03_model_training.ipynb` produces `ddi_xgb.joblib`
 and `label_encoder.joblib`. Expect the XGBoost training cell to take significant
 time on CPU (~80 minutes in development).
 
+## Docker
+
+A Streamlit-only Docker image is included, matching the serving footprint of the live Hugging Face deployment. It's not used for that deployment itself (Spaces builds its own container automatically), but demonstrates a platform-independent build path.
+
+```bash
+docker build -t ddi-predictor .
+docker run -p 8501:8501 ddi-predictor
+```
+
+Then visit `http://localhost:8501`.
+
+Uses `requirements-docker.txt` rather than the main `requirements.txt` — a trimmed dependency set containing only what's needed to serve predictions (no training, notebook, or FastAPI dependencies).
+
 ## Project structure
 
 ```
@@ -81,6 +94,9 @@ DDI_Project/
 │   ├── 04_explainability.ipynb        Native SHAP-style explanations, translation dictionary
 │   └── 05_app_testing.ipynb           Drug lookup + end-to-end pipeline test
 ├── data/                      Raw dataset + cached fingerprints (gitignored)
+├── Dockerfile                 Streamlit-only container image
+├── requirements-docker.txt    Trimmed dependencies for the Docker image
+├── .dockerignore
 ├── requirements.txt
 ├── LICENSE.md
 └── README.md
