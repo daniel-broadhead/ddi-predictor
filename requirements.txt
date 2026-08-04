@@ -1,0 +1,37 @@
+# Drug-Drug Interaction Predictor — requirements.txt
+# Generated from DDI_Project_Guide_docx.pdf
+
+# --- RDKit ---
+# Install locally via conda, NOT pip:
+#   conda install -c conda-forge rdkit
+# Only uncomment the line below for pip-only environments (e.g. Hugging Face Spaces),
+# since Spaces builds don't use conda:
+# rdkit-pypi
+
+# --- Data & core ML ---
+pandas
+# Pinned: RDKit (installed via conda) was compiled against NumPy 1.x.
+# NumPy 2.x breaks RDKit's C-extension imports with "AttributeError: _ARRAY_API not found".
+numpy<2
+scikit-learn
+xgboost
+shap
+
+# --- Dataset access ---
+# Pinned: newer PyTDC releases pull in cellxgene-census -> tiledbsoma,
+# a compiled single-cell genomics dependency unrelated to this project
+# that fails to build on Windows. 0.4.1 has the lean dependency set
+# (numpy, pandas, tqdm, seaborn, scikit-learn, fuzzywuzzy).
+PyTDC==0.4.1
+
+# --- App / API ---
+streamlit
+fastapi
+uvicorn
+pydantic
+
+# --- Model persistence ---
+joblib
+
+# --- Plotting (used for confusion matrix, SHAP summary plots) ---
+matplotlib
