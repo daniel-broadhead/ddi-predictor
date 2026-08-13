@@ -8,8 +8,6 @@ Predicts the specific type of interaction between two drugs — not just whether
 
 Given two drug names, the model predicts which of 54 clinically distinct interaction types is most likely between them (e.g. *"may increase the anticoagulant activities of"*), along with the underlying fingerprint features driving that prediction, via SHAP-style attribution.
 
-Try it: [live demo link — add once deployed to Hugging Face Spaces]
-
 ## Why multiclass, not binary
 
 Most DDI classifier projects predict a simple yes/no interaction flag. This one predicts the interaction *mechanism* instead — a more clinically useful signal, and a better showcase of both ML engineering and domain understanding. The dataset (TDC's DrugBank benchmark, 191,808 pairs) is natively labeled with 86 distinct interaction types; after merging classes with fewer than 100 samples into a single `Other` bucket, this became a 54-class problem.
@@ -62,7 +60,7 @@ time on CPU (~80 minutes in development).
 
 ## Docker
 
-A Streamlit-only Docker image is included, matching the serving footprint of the live Hugging Face deployment. It's not used for that deployment itself (Spaces builds its own container automatically), but demonstrates a platform-independent build path.
+A Streamlit-only Docker image is included.
 
 ```bash
 docker build -t ddi-predictor .
