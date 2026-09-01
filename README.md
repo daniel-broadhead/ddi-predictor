@@ -49,6 +49,8 @@ uvicorn app.api:app --reload
 streamlit run app/streamlit_app.py
 ```
 
+Trained model artifacts (`models/*.joblib`) are included in this repo, so no training step is required to run the app. To retrain from scratch instead, run notebooks `01` through `03` in order.
+
 **Notes:**
 - `requirements.txt` pins `numpy<2` (RDKit's conda build predates NumPy 2.x's breaking ABI change) and `PyTDC==0.4.1` (newer releases pull in an unrelated single-cell genomics dependency, `tiledbsoma`, that fails to build on Windows).
 - `.streamlit/config.toml` sets `headless = true` and is committed to the repo — this avoids a Windows-specific issue where Streamlit's automatic browser-launch step can silently kill the server right after startup.
@@ -104,7 +106,7 @@ DDI_Project/
 
 - **The `Other` class isn't a real pharmacological category.** It's a statistical necessity — 33 interaction types with fewer than 100 training samples each, merged so the model and evaluation would be viable. Some of the individually-rare types folded into `Other` may be clinically significant despite being data-poor. **This tool does not replace professional medical or pharmacist guidance, especially for any interaction the model places in the `Other` category.**
 - **Drug name lookup is currently limited to 9 well-known drugs**, resolved via PubChem as a temporary stand-in. A full 1,706-drug lookup (joining DrugBank's vocabulary export against this dataset's SMILES) is in progress, pending DrugBank's academic download access coming back online.
-- Future feature: map top contributing fingerprint bits back to actual molecular substructures (partially built in `notebooks/`, not yet wired into the live app).
+
 
 ## License
 
