@@ -13,10 +13,6 @@ data/
 # Jupyter
 .ipynb_checkpoints/
 
-# Models (we'll use Git LFS or HuggingFace for these later)
-models/*.pkl
-models/*.joblib
-
 # OS
 .DS_Store
 Thumbs.db
